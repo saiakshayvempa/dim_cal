@@ -86,7 +86,7 @@ def pdf_file_to_list(folder_path):
 
     for filename in os.listdir(folder_path):
         if filename.endswith(".pdf"):
-            print("file_name--->",filename)
+
             file_path = os.path.join(folder_path, filename)
 
             # Open the PDF file
@@ -105,14 +105,14 @@ def pdf_file_to_list(folder_path):
                     # print("text type----------------------------------------------------------------------\n",type(text))
                     page_text = text.split()
                     pagecont.extend(page_text)
-                print("pagecont",pagecont)
+
                 axis = find_axis(filename)
-                print("axis------------->", axis)
+
                 m, o = cordinate_readings(pagecont)
-                # print("m,o",m,o)
+
                 reads = get_readings(m, o)
                 result = {}
-                print("reads", reads)
+
 
                 alerts = []
                 for i in reads:
@@ -122,7 +122,7 @@ def pdf_file_to_list(folder_path):
                     res["Tolerance"] = tol
                     x = reads[i]
 
-                    print("X----->", x)
+
 
                     res["set_1"] = x[0]
                     res["set_2"] = x[1]
@@ -131,8 +131,7 @@ def pdf_file_to_list(folder_path):
                     res["rem"] = remarks(i, x, tol)
                     axis = axis[0]
                     alerts.append(res)
-                # print("result",result)
-                # print("alerts---->>>",alerts)
+
                 count += 1
                 key = f"key_{count}"
                 response[key] = alerts

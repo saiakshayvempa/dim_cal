@@ -1,7 +1,6 @@
 from flask_restful import Resource, request
-# from .service.get_pdf_content import pdf_file_to_list
 
-from service.get_pdf_content import pdf_file_to_list
+
 
 class FileUpload(Resource):
     def post(self):
