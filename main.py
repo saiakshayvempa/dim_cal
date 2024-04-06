@@ -18,7 +18,7 @@ class HelloWord(Resource):
         try:
             return {'res_status': True, 'msg': 'Hello World', "data":"data"}
         except Exception as e:
-            print('error :', str(e))
+
             return {'res_status': False, 'msg': "msg"}
 
 
