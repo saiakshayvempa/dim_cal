@@ -11,6 +11,7 @@ class ReportGenerate(Resource):
             # Check if all files are present in the request
             request_data = request.get_json()
 
+            print("request data ",request_data)
             folder_path = "C:/Users/Akshay/PycharmProjects/validator/s3/"
             # pdf_file_to_list(folder_path)
             response = pdf_file_to_list(folder_path)

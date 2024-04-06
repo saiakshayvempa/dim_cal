@@ -13,7 +13,7 @@ class FileUpload(Resource):
                     return {'res_status': False, 'msg': f'File {file_key} not provided'}
 
             # Save each file
-            folder_path = "C:/Users/Akshay/PycharmProjects/validator/s3/"
+            folder_path = "D:\FullStack_Projects\Angular_Projects\Project_Automation\Source"
             file_paths = {}
             for file_key in required_files:
                 file = request.files[file_key]
