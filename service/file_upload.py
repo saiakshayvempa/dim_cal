@@ -4,7 +4,7 @@ import os
 
 from models.store_reports import move_files
 
-class 5FileUpload(Resource):
+class FileUpload(Resource):
     def post(self):
         try:
 
