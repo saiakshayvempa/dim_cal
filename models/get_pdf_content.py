@@ -64,12 +64,34 @@ def cordinate_readings(matter):
 
 
 
-def tolderance(x):
-    x = float(x)
-    return 1.8+(x/400)
+def tolderance(x,request_data):
+    e1 = request_data.get('err_1',None)
+    e2 = request_data.get('err_2',None)
+
+    if e1 == None or e2 == None:
+
+        sp_ac = request_data.get('sp_ac')
 
 
-def pdf_file_to_list(folder_path):
+        if type(x)== str:
+            l = x
+        else:
+            l=str(x)
+
+        sp_ac = sp_ac.replace("L", l)
+
+        result = eval(sp_ac)
+
+
+        return result
+
+    else:
+        x = float(x)
+        # return 1.8+(x/400)
+        return e1+(x/e2)
+
+
+def pdf_file_to_list(folder_path,request_data):
     response = {}
     count = 0
 
@@ -109,13 +131,13 @@ def pdf_file_to_list(folder_path):
 
                 alerts = []
                 for i in reads:
-                    tol = tolderance(i)
+                    tol = tolderance(i,request_data)
                     res = {}
                     res["Measured_Size"] = i
                     res["Tolerance"] = tol
                     x = reads[i]
 
-                    print("x",x)
+                    # print("x",x)
 
                     if len(x)>2:
                         res["set_1"] = x[0]

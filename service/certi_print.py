@@ -12,13 +12,13 @@ class ReportGenerate(Resource):
             # Check if all files are present in the request
             request_data = request.get_json()
             # make dyanamic
-            print("request_data",request_data)
+            # print("request_data",request_data)
             root_folder = os.getcwd()
 
 
             folder_path = f"{root_folder}\s3"
             # pdf_file_to_list(folder_path)
-            response = pdf_file_to_list(folder_path)
+            response = pdf_file_to_list(folder_path,request_data)
 
             set_x = response['key_1']
             set_y = response['key_2']
@@ -48,7 +48,7 @@ class ReportGenerate(Resource):
             destination_folder = f"{destination_folder}/report_library"
 
 
-            print('doc_fiel', doc_file,'pdf_file',pdf_file)
+            # print('doc_fiel', doc_file,'pdf_file',pdf_file)
             # move_files(source_folder, destination_folder)
 
             return {'res_status': True, 'msg': 'Certificate Generated Sussfully', 'doc_file': doc_file,'pdf_file':pdf_file,"link":'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'}
