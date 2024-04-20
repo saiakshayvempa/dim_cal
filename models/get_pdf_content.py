@@ -2,6 +2,8 @@ import PyPDF2
 import os
 from PyPDF2 import PdfReader
 
+from models.get_content import get_readings_data,get_readings
+
 def find_axis(file_name):
     axis = file_name.split(".pdf")[0]
     return axis
@@ -60,27 +62,36 @@ def cordinate_readings(matter):
             w.append(new[i + 1])
     return q,w
 
-def get_readings(m,o):
-    dis = {}
-    for i in range(0, len(m) - 1):
-        k = m[i]
-        if m[i] < m[i + 1]:
-            if m[i] in dis.keys():
-                v = dis[k]
-                a = o[i]
-                v.append(a)
-                dis[k] = v
-            else:
-                dis[k] = [o[i]]
-
-    return dis
-
-def tolderance(x):
-    x = float(x)
-    return 1.8+(x/400)
 
 
-def pdf_file_to_list(folder_path):
+def tolderance(x,request_data):
+    e1 = request_data.get('err_1',None)
+    e2 = request_data.get('err_2',None)
+
+    if e1 == None or e2 == None:
+
+        sp_ac = request_data.get('sp_ac')
+
+
+        if type(x)== str:
+            l = x
+        else:
+            l=str(x)
+
+        sp_ac = sp_ac.replace("L", l)
+
+        result = eval(sp_ac)
+
+
+        return result
+
+    else:
+        x = float(x)
+        # return 1.8+(x/400)
+        return e1+(x/e2)
+
+
+def pdf_file_to_list(folder_path,request_data):
     response = {}
     count = 0
 
@@ -110,34 +121,36 @@ def pdf_file_to_list(folder_path):
 
                 m, o = cordinate_readings(pagecont)
 
-                reads = get_readings(m, o)
-                result = {}
+                # reads = get_readings(m, o)
+                # print("reads",reads)
+                base_data,read_data =get_readings_data(pagecont)
+
+
+                reads = get_readings(base_data, read_data)
 
 
                 alerts = []
                 for i in reads:
-                    tol = tolderance(i)
+                    tol = tolderance(i,request_data)
                     res = {}
                     res["Measured_Size"] = i
                     res["Tolerance"] = tol
                     x = reads[i]
 
+                    # print("x",x)
 
+                    if len(x)>2:
+                        res["set_1"] = x[0]
+                        res["set_2"] = x[1]
+                        res["set_3"] = x[2]
+                        res["rep"] = repatability(i, x)
+                        res["rem"] = remarks(i, x, tol)
+                        axis = axis[0]
+                        alerts.append(res)
 
-                    res["set_1"] = x[0]
-                    res["set_2"] = x[1]
-                    res["set_3"] = x[2]
-                    res["rep"] = repatability(i, x)
-                    res["rem"] = remarks(i, x, tol)
-                    axis = axis[0]
-                    alerts.append(res)
 
                 count += 1
                 key = f"key_{count}"
                 response[key] = alerts
-
     return response
 
-#
-# folder_path = 'C:/Users/Akshay/PycharmProjects/project_N/input'
-# pdf_file_to_list(folder_path)
