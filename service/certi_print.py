@@ -15,8 +15,6 @@ class ReportGenerate(Resource):
             # print("request_data",request_data)
             root_folder = os.getcwd()
 
-
-            folder_path = f"{root_folder}\s3"
             # pdf_file_to_list(folder_path)
             response = pdf_file_to_list(folder_path,request_data)
 
